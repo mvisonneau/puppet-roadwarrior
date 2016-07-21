@@ -14,12 +14,10 @@ class roadwarrior (
   $cert_dir             = $::roadwarrior::params::cert_dir,
   $cert_lifespan        = $::roadwarrior::params::cert_lifespan,
   $cert_password        = $::roadwarrior::params::cert_password,
-  $clients              = {},
 ) inherits ::roadwarrior::params {
 
   validate_string( $vpn_dns_servers )
-  validate_hash( $clients )
-  
+
   # Compat checks
   if ($::operatingsystem != "Debian" and $::operatingsystem != "Ubuntu") {
     fail("Sorry, only Debian or Ubuntu distributions are supported by the roadwarrior module at this time. PRs welcome")
@@ -120,10 +118,7 @@ class roadwarrior (
     group   => 'root',
     require => File['/etc/ipsec.conf'],
   }
-
-  # Create roadwarrior::client resources
-  create_resources( roadwarrior::client, $clients )
-
+  
 }
 
 # vi:smartindent:tabstop=2:shiftwidth=2:expandtab:
