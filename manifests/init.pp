@@ -13,8 +13,10 @@ class roadwarrior (
   $cert_dir             = $::roadwarrior::params::cert_dir,
   $cert_lifespan        = $::roadwarrior::params::cert_lifespan,
   $cert_password        = $::roadwarrior::params::cert_password,
+  $clients              = {},
 ) inherits ::roadwarrior::params {
 
+  validate_hash( $clients )
 
   # Compat checks
   if ($::operatingsystem != "Debian" and $::operatingsystem != "Ubuntu") {
@@ -117,7 +119,8 @@ class roadwarrior (
     require => File['/etc/ipsec.conf'],
   }
 
-
+  # Create roadwarrior::client resources
+  create_resources( roadwarrior::client, $clients )
 
 }
 
